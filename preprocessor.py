@@ -3,6 +3,7 @@ from tmdbv3api import TMDb, Movie
 from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
+import random
 
 # Initialize TMDB
 tmdb = TMDb()
@@ -14,8 +15,16 @@ movie_obj = Movie()
 # Fetch popular movies list 
 popular_movies = movie_obj.popular()
 
+top_popular_movies = []
+movie_set = set()
 # Selcet first 20 movies if we want to select random movies that can also be done 
-top_popular_movies = [ movie for i,movie in enumerate(popular_movies) if i < 20]
+while(len(top_popular_movies) < 20) :
+    rand_idx = random.randint(0, len(popular_movies)-1)
+    if(popular_movies[rand_idx].id not in movie_set):
+        movie_set.add(popular_movies[rand_idx].id)
+        top_popular_movies.append(popular_movies[rand_idx])
+
+    
 
 # Storing some data from the list 
 movies_data = []

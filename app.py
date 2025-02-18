@@ -8,16 +8,23 @@ import ast
 import sys
 import subprocess
 
-with st.status("Fetching latest movie data and generating embeddings (Preprocessing)..."):
-    try:
-        # Use sys.executable to ensure it uses the same environment as Streamlit
-        result = subprocess.run([sys.executable, "preprocessor.py"], check=True, capture_output=True, text=True)
-        st.success("Preprocessing completed successfully!")
-    except subprocess.CalledProcessError as e:
-        st.error("Preprocessing Failed!")
-        st.error(f"Stdout:\n{e.stdout or 'No stdout'}")
-        st.error(f"Stderr:\n{e.stderr or 'No stderr'}")
-        st.stop()
+def run_preprocessing():
+    if "preprocessed" not in st.session_state:
+        st.session_state.preprocessed = False
+
+
+    if not st.session_state.preprocessed:
+
+        with st.status("Fetching latest movie data and generating embeddings..."):
+            try:
+                result = subprocess.run([sys.executable, "preprocessor.py"], check=True, capture_output=True, text=True)
+                st.success("Preprocessing completed successfully!")
+                st.session_state.preprocessed = True 
+            except subprocess.CalledProcessError as e:
+                st.error("Preprocessing Failed!")
+                st.stop()
+
+run_preprocessing()
 
 # Load data
 df = pd.read_csv('movies_metadata.csv')
@@ -80,4 +87,11 @@ if movie_title or button_clicked:
                 st.divider()
     else:
         st.warning('Please enter a movie title.')
+
+refresh_movies = st.button("Refresh the database and generate new embeddings")
+if refresh_movies:
+    st.session_state.preprocessed = False
+    run_preprocessing()
+
+
 
