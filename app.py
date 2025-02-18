@@ -5,18 +5,26 @@ import faiss
 import numpy as np
 import pandas as pd
 import ast
-import os
 import subprocess
-from pathlib import Path
-if not Path("movie_index.faiss").exists():
-    with st.status("Initial setup..."):
-        try:
-            subprocess.run([
-                "python", "preprocessor.py"
-            ], check=True, env=os.environ.copy())
-        except Exception as e:
-            st.error(f"Setup failed: {str(e)}")
-            st.stop()
+
+with st.status("Fetching latest movie data and generating embeddings (Preprocessing)...", expanded=True) as status:
+    try:
+        # Run preprocessor
+        result = subprocess.run(["python", "preprocessor.py"], check=True, capture_output=True, text=True)
+        status.update(
+            label="Preprocessing completed successfully!",
+            state="complete",
+            expanded=False
+        )
+    except subprocess.CalledProcessError as e:
+        error_stdout = e.stdout.strip() if e.stdout else "No stdout"
+        error_stderr = e.stderr.strip() if e.stderr else "No stderr"
+        status.update(label=f"Error in preprocessing: {error_stderr}", state="error", expanded=True)
+        st.error("Preprocessing Failed!")
+        st.error(f"Stdout:\n{error_stdout}")
+        st.error(f"Stderr:\n{error_stderr}")
+        st.stop()
+
 # Load data
 df = pd.read_csv('movies_metadata.csv')
 df['genres'] = df['genres'].apply(ast.literal_eval)
