@@ -1,10 +1,15 @@
 # 🎬 Dynamic Movie Similarity Analyzer
 
-A system that recommends movies based on storyline, genre, and summary similarity using semantic embeddings and FAISS for efficient similarity search.
+A system that recommends movies based on storyline, genre, and summary similarity using semantic embeddings utilising SentenceTransformer which were indexed using FAISS for efficient similarity search.
 
 
 ## ✨ Features
-- **Dynamic Movie Processing**: Fetch unseen movies via TMDB API
+- **Dynamic Movie Processing** Fetch unseen movies via TMDB API
+- **Generates text embeddings** with Sentence Transformers.
+- **Indexes these embeddings** using FAISS for fast similarity search.
+- Serves a user interface via **Streamlit**, allowing users to type in a movie title and get top matching movies and also refresh the database to get new embeddings.
+
+
 
 ## 🛠️ Workflow
 ### Data Pipeline
