@@ -2,7 +2,7 @@
 
 A system that recommends movies based on storyline, genre, and summary similarity using semantic embeddings utilising SentenceTransformer which were indexed using FAISS for efficient similarity search.
 
-## Deployed Streamlit Cloud Link :- 
+## Deployed Streamlit Cloud Link :- https://movie-assignment-lqzekaykk3rnewmby3mkkf.streamlit.app/
 
 ## How to run locally 
  ```sh
