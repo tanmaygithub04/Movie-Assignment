@@ -5,6 +5,15 @@ import faiss
 import numpy as np
 import pandas as pd
 import ast
+import subprocess
+if "preprocessed" not in st.session_state:
+    with st.status("Fetching latest movie data and generating embeddings , Preprocessing ..", expanded=True) as status:
+        try:
+            subprocess.run(["python", "preprocessor.py"], check=True)
+            st.session_state.preprocessed = True  # Mark as done
+            status.update(label="Preprocessing completed successfully!", state="complete", expanded=False)
+        except Exception as e:
+            status.update(label=f"Error in preprocessing: {e}", state="error", expanded=True)
 
 # Load data
 df = pd.read_csv('movies_metadata.csv')
@@ -44,7 +53,7 @@ if movie_title or button_clicked:
         if not movie_data:
             st.error('Movie not found. Check the title or try another.')
         else:
-            # Convert User Input into embedding 
+            # Convert user input into embedding 
             query_text = f"Overview: {movie_data['overview']} Genres: {', '.join(movie_data['genres'])}"
             query_embedding = model.encode([query_text], normalize_embeddings=True)[0]
             query_embedding = np.array(query_embedding).astype('float32').reshape(1, -1)
@@ -55,7 +64,6 @@ if movie_title or button_clicked:
             print(scores)
             indexed_scores = zip(scores[0], indices[0])
             
-            # Display results
             st.subheader('Top Matches:')
             for i, (score, idx) in enumerate(indexed_scores):
                 print(f"FAISS Index: {idx}, Movie Title: {df.iloc[idx]['title']}")
