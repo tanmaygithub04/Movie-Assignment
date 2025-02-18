@@ -5,24 +5,18 @@ import faiss
 import numpy as np
 import pandas as pd
 import ast
+import sys
 import subprocess
 
-with st.status("Fetching latest movie data and generating embeddings (Preprocessing)...", expanded=True) as status:
+with st.status("Fetching latest movie data and generating embeddings (Preprocessing)..."):
     try:
-        # Run preprocessor
-        result = subprocess.run(["python", "preprocessor.py"], check=True, capture_output=True, text=True)
-        status.update(
-            label="Preprocessing completed successfully!",
-            state="complete",
-            expanded=False
-        )
+        # Use sys.executable to ensure it uses the same environment as Streamlit
+        result = subprocess.run([sys.executable, "preprocessor.py"], check=True, capture_output=True, text=True)
+        st.success("Preprocessing completed successfully!")
     except subprocess.CalledProcessError as e:
-        error_stdout = e.stdout.strip() if e.stdout else "No stdout"
-        error_stderr = e.stderr.strip() if e.stderr else "No stderr"
-        status.update(label=f"Error in preprocessing: {error_stderr}", state="error", expanded=True)
         st.error("Preprocessing Failed!")
-        st.error(f"Stdout:\n{error_stdout}")
-        st.error(f"Stderr:\n{error_stderr}")
+        st.error(f"Stdout:\n{e.stdout or 'No stdout'}")
+        st.error(f"Stderr:\n{e.stderr or 'No stderr'}")
         st.stop()
 
 # Load data
