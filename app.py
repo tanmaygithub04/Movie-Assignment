@@ -5,16 +5,18 @@ import faiss
 import numpy as np
 import pandas as pd
 import ast
+import os
 import subprocess
-if "preprocessed" not in st.session_state:
-    with st.status("Fetching latest movie data and generating embeddings , Preprocessing ..", expanded=True) as status:
+from pathlib import Path
+if not Path("movie_index.faiss").exists():
+    with st.status("Initial setup..."):
         try:
-            subprocess.run(["python", "preprocessor.py"], check=True)
-            st.session_state.preprocessed = True  # Mark as done
-            status.update(label="Preprocessing completed successfully!", state="complete", expanded=False)
+            subprocess.run([
+                "python", "preprocess.py"
+            ], check=True, env=os.environ.copy())
         except Exception as e:
-            status.update(label=f"Error in preprocessing: {e}", state="error", expanded=True)
-
+            st.error(f"Setup failed: {str(e)}")
+            st.stop()
 # Load data
 df = pd.read_csv('movies_metadata.csv')
 df['genres'] = df['genres'].apply(ast.literal_eval)
