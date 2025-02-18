@@ -4,10 +4,11 @@ from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
 import random
+import streamlit as st
 
 # Initialize TMDB
 tmdb = TMDb()
-tmdb.api_key = '1d7c23ce27c4f86a2a66312a4b34d724' 
+tmdb.api_key = st.secrets["api_keys"]["tmdb_api_key"]
 tmdb.language = 'en'
 
 movie_obj = Movie()

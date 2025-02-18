@@ -34,7 +34,7 @@ model = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Initialize TMDB
 tmdb = TMDb()
-tmdb.api_key = '1d7c23ce27c4f86a2a66312a4b34d724'  
+tmdb.api_key = st.secrets["api_keys"]["tmdb_api_key"] 
 tmdb.language = 'en'
 movie_api = Movie()
 
