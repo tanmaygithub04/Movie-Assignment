@@ -12,7 +12,7 @@ if not Path("movie_index.faiss").exists():
     with st.status("Initial setup..."):
         try:
             subprocess.run([
-                "python", "preprocess.py"
+                "python", "preprocessor.py"
             ], check=True, env=os.environ.copy())
         except Exception as e:
             st.error(f"Setup failed: {str(e)}")
