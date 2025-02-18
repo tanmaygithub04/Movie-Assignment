@@ -6,9 +6,10 @@ import numpy as np
 import random
 import streamlit as st
 
+
 # Initialize TMDB
 tmdb = TMDb()
-tmdb.api_key = st.secrets["api_keys"]["tmdb_api_key"]
+tmdb.api_key = st.secrets["tmdb_api_key"]
 tmdb.language = 'en'
 
 movie_obj = Movie()

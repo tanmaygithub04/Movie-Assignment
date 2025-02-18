@@ -34,7 +34,7 @@ model = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Initialize TMDB
 tmdb = TMDb()
-tmdb.api_key = st.secrets["api_keys"]["tmdb_api_key"] 
+tmdb.api_key = st.secrets["tmdb_api_key"] 
 tmdb.language = 'en'
 movie_api = Movie()
 
@@ -71,15 +71,15 @@ if movie_title or button_clicked:
             
             # FAISS search
             scores, indices = index.search(query_embedding, 2)
-            print(indices)
-            print(scores)
+            # print(indices)
+            # print(scores)
             indexed_scores = zip(scores[0], indices[0])
             
             st.subheader('Top Matches:')
             for i, (score, idx) in enumerate(indexed_scores):
-                print(f"FAISS Index: {idx}, Movie Title: {df.iloc[idx]['title']}")
+                # print(f"FAISS Index: {idx}, Movie Title: {df.iloc[idx]['title']}")
                 match = df.iloc[idx]
-                print(match['genres'])
+                # print(match['genres'])
                 common_genres = set(movie_data['genres']).intersection(set(match['genres']))
                 percentage = (score + 1) * 50 # since I am using cosine similarity it give output in -1,1 so it becomes 0-2 , and to get percentage it is multiplied by 50
                 st.write(f"**{i+1}. {match['title']}** ({percentage:.1f}%)")  # this syntax is used to round of the percentage to first decimal places  
