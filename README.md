@@ -2,7 +2,6 @@
 
 A system that recommends movies based on storyline, genre, and summary similarity using semantic embeddings utilising SentenceTransformer which were indexed using FAISS for efficient similarity search.
 
-## Deployed Streamlit Cloud Link :- https://movie-assignment-lqzekaykk3rnewmby3mkkf.streamlit.app/
 
 ## How to run locally 
  ```sh
@@ -11,6 +10,27 @@ A system that recommends movies based on storyline, genre, and summary similarit
     pip install requirements.txt
     streamlit run app.py
    ```
+ make sure you have created a folder named secrets inside root directory , which will have `secrets.toml` and you will specify your TMDB API like :- `tmdb_api_key = "your_api_key"`
+
+-  you can also save this script and give it permissions using chmod command simply run it:- 
+```sh
+  #!/bin/bash
+  SECRETS_DIR="secrets"
+  SECRETS_FILE="$SECRETS_DIR/secrets.toml"
+  
+  if [ ! -d "$SECRETS_DIR" ]; then
+      mkdir "$SECRETS_DIR"
+      echo "Created folder: $SECRETS_DIR"
+  else
+      echo "Folder $SECRETS_DIR already exists."
+  fi
+  echo 'tmdb_api_key = "your_api_key"' > "$SECRETS_FILE"
+  echo "Created secrets file: $SECRETS_FILE"
+  echo "Contents of $SECRETS_FILE:"
+  cat "$SECRETS_FILE"
+```
+
+## Deployed Streamlit Cloud Link :- https://movie-assignment-lqzekaykk3rnewmby3mkkf.streamlit.app/
 
 
 
@@ -46,7 +66,7 @@ index.add(embeddings)
 4. **Details on Deployment and Frontend**:
    - Frontend in implemented using Streamlit for easier deployment
    - I was initially thinking of creating a pipleline using github actions but that was not suitable here since I decided  we need to preprocess everytime the page loads
-   - 
+   - API key is uploaded to Streamlit Cloud so if running locally 
   
 
 
